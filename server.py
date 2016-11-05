@@ -77,7 +77,7 @@ class Login(Resource):
         out_children.append({"username": child.username, "isChild": child.is_child, "userStage": child.user_stage, "fullName": child.full_name})
 
       # Return the array of parents and children
-      return {"parents": out_parents, "children": out_children}
+      return {"active_user": user.username, "parents": out_parents, "children": out_children}
 
     def post(self):
       # Receive the login data
