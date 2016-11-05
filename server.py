@@ -9,17 +9,21 @@ CORS(app)
 api = Api(app)
 db = SQL()
 
+# Check login credentials
 class Login(Resource):
     def post(self):
+      # Receive the login data
       login_data = request.get_json()
-      if db.valid_user(login_data["username"]):
-        user = db.get_user(login_data["username"])
-        if user.password == login_data["password"]:
+      input_username =(login_data["username"]).lower()
+      input_password = login_data["password"]
+      if db.valid_user(input_username):
+        user = db.get_user(input_username)
+        if user.password == input_password:
           if user.is_child:
             return {"username": user.username, "isChild": user.is_child, "userStage": user.user_stage, "fullName": user.full_name} 
           else:
              return {"username": user.username, "isChild": user.is_child, "fullName": user.full_name} 
-      return {"Login":"Failed"}
+      return {"status":"Login Failed :'("}
 
 
 api.add_resource(Login, '/login')
