@@ -2,6 +2,8 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
+from firebase import firebase
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///server.db'
@@ -140,9 +142,23 @@ class Get_User_Chores(Resource):
       return {"chores": chores_array}
 
 
+class Update_Acount(Resource):
+  def get(self, username, value):
+    try:
+      account = "/account/{0}".format(username)
+      funds = {"balance": float(value)}
+      # Look for user in the database
+      fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+      result = fb_connect.patch(account, funds, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+      return {"status": "Success", "Message": "Firebase updated success"}
+    except:
+     return {"status": "Error", "Message": "Firebase updated failure"}
+    
+
 api.add_resource(Login, '/login')
-api.add_resource(Get_All_Chores, '/chores/')
+api.add_resource(Get_All_Chores, '/chores')
 api.add_resource(Get_User_Chores, '/chores/<string:username>')
+api.add_resource(Update_Acount, '/update/account/<string:username>/<string:value>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
