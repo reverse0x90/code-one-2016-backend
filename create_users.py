@@ -62,5 +62,4 @@ for child in children:
 		print "\t{0}".format(parent.full_name)
 	print "\n"
 
-user = User.query.filter_by(username="wrong").first()
-print user
+ parents = User.query.filter_by(parents=homer).distinct()

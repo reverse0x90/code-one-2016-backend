@@ -43,9 +43,42 @@ class User(db.Model):
     self.full_name = full_name
     self.children = children
 
-    
+
 # Check login credentials
 class Login(Resource):
+    def _seralize_user(self, user):
+      parents = []
+      children = []
+      out_parents = []
+      out_children = []
+
+      # If the user is a child get its parents. Else get the parents children
+      # This will need to be improved inorder to scale
+      if user.is_child:
+        for parent in user.parents:
+          for child in parent.children:
+            if child not in children:
+              children.append(child)
+          if parent not in parents:
+            parents.append(parent)
+      else:
+        for child in user.children:
+          for parent in child.parents:
+            if parent not in parents:
+              parents.append(parent)
+          if child not in children:
+            children.append(child)
+
+      # Now we have the list of children and parents
+      for parent in parents:
+        out_parents.append({"username": parent.username, "isChild": parent.is_child, "fullName": parent.full_name})
+
+      for child in children:
+        out_children.append({"username": child.username, "isChild": child.is_child, "userStage": child.user_stage, "fullName": child.full_name})
+
+      # Return the array of parents and children
+      return {"parents": out_parents, "children": out_children}
+
     def post(self):
       # Receive the login data
       login_data = request.get_json()
@@ -57,10 +90,7 @@ class Login(Resource):
       user = User.query.filter_by(username=json_username).first()
       if user:
         if user.password == json_password:
-          if user.is_child:
-            return {"username": user.username, "isChild": user.is_child, "userStage": user.user_stage, "fullName": user.full_name} 
-          else:
-             return {"username": user.username, "isChild": user.is_child, "fullName": user.full_name} 
+          return self._seralize_user(user)
       return {"status":"Login Failed :'("}
 
 
