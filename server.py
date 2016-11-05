@@ -23,7 +23,7 @@ class Login(Resource):
             return {"username": user.username, "isChild": user.is_child, "userStage": user.user_stage, "fullName": user.full_name} 
           else:
              return {"username": user.username, "isChild": user.is_child, "fullName": user.full_name} 
-      return {"status":"Login Failed :'(  ¯\_(ツ)_/¯"}
+      return {"status":"Login Failed :'("}
 
 
 api.add_resource(Login, '/login')
