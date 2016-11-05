@@ -11,11 +11,18 @@ CORS(app)
 api = Api(app)
 
 
+
 #Table to handle the self-referencing many-to-many relationship for the User class:
 #First column holds the user who is a parent, the second the user is the child.
 user_to_user = db.Table('user_to_user',
     db.Column("parent_id", db.Integer, db.ForeignKey("user.id"), primary_key=True),
     db.Column("child_id", db.Integer, db.ForeignKey("user.id"), primary_key=True)
+)
+
+
+user_to_chores = db.Table('user_to_chores', db.Model.metadata,
+    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
+    db.Column("chore_id", db.Integer, db.ForeignKey("chore.id"))
 )
 
 class User(db.Model):
@@ -33,7 +40,8 @@ class User(db.Model):
                     secondaryjoin=id==user_to_user.c.child_id,
                     backref="parents"
   )
-  chores = db.relationship('Chore', backref='user', lazy='dynamic')
+  chores = db.relationship("Chore", secondary=user_to_chores)
+  
 
   def __init__(self, username, password, is_child, user_stage, full_name, children, chores):
     self.username = username
@@ -45,7 +53,7 @@ class User(db.Model):
     self.chores = chores
 
 class Chore(db.Model):
-  __tablename__ = 'chores'
+  __tablename__ = 'chore'
   id = db.Column(db.Integer, primary_key=True)
   #parent_id = db.Column(db.Integer,db.ForeignKey('user.id'))
   title = db.Column(db.String(250), unique=True)
