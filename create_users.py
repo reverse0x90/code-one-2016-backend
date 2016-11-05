@@ -47,6 +47,13 @@ homer = User(username="homer", password="homer", is_child=0, user_stage=0, full_
 marge = User(username="marge", password="marge", is_child=0, user_stage=0, full_name="Marge Simpson", children=[bart, maggie, lisa], chores=[])
 
 # Add the objects to the database
+db.session.add(mow_lawn)
+db.session.add(empty_dishwasher)
+db.session.add(vacuum_family_room)
+db.session.add(clean_bathrooms)
+db.session.add(take_dog_for_walk)
+db.session.add(get_an_A)
+db.session.add(sweep_garage)
 db.session.add(maggie)
 db.session.add(lisa)
 db.session.add(bart)
@@ -59,6 +66,7 @@ db.session.add(adam)
 db.session.add(josiah)
 db.session.add(homer)
 db.session.add(marge)
+
 db.session.commit()
 
 parents = User.query.filter_by(is_child=0)

@@ -61,7 +61,6 @@ class Chore(db.Model):
   salary = db.Column(db.Float)
   image_path = db.Column(db.Text)
   status = db.Column(db.String(250))
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
   def __init__(self, title, description, salary, image_path, status):
     self.title = title
@@ -121,8 +120,29 @@ class Login(Resource):
           return self._seralize_user(user)
       return {"status":"Login Failed :'("}
 
+# Check login credentials
+class Get_All_Chores(Resource):
+  def get(self):
+    chores = Chore.query.all()
+    chores_array = []
+    for chore in chores:
+      chores_array.append({"title":chore.title, "description": chore.description, "salary": chore.salary, "image_path": chore.image_path, "status": chore.status}) 
+    return {"chores": chores_array}
+
+class Get_User_Chores(Resource):
+  def get(self, username):
+     # Look for user in the database
+      user = User.query.filter_by(username=username).first()
+      chores_array = []
+      if user:
+         for chore in user.chores:
+          chores_array.append({"title":chore.title, "description": chore.description, "salary": chore.salary, "image_path": chore.image_path, "status": chore.status}) 
+      return {"chores": chores_array}
+
 
 api.add_resource(Login, '/login')
+api.add_resource(Get_All_Chores, '/chores/')
+api.add_resource(Get_User_Chores, '/chores/<string:username>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
