@@ -18,7 +18,6 @@ user_to_user = db.Table('user_to_user',
     db.Column("child_id", db.Integer, db.ForeignKey("user.id"), primary_key=True)
 )
 
-
 class User(db.Model):
   __tablename__ = 'user'
   id = db.Column(db.Integer, primary_key=True)
@@ -33,16 +32,35 @@ class User(db.Model):
                     primaryjoin=id==user_to_user.c.parent_id,
                     secondaryjoin=id==user_to_user.c.child_id,
                     backref="parents"
-    )
+  )
+  chores = db.relationship('Chore', backref='user', lazy='dynamic')
 
-  def __init__(self, username, password, is_child, user_stage, full_name, children):
+  def __init__(self, username, password, is_child, user_stage, full_name, children, chores):
     self.username = username
     self.password = password
     self.is_child = is_child
     self.user_stage = user_stage
     self.full_name = full_name
     self.children = children
+    self.chores = chores
 
+class Chore(db.Model):
+  __tablename__ = 'chores'
+  id = db.Column(db.Integer, primary_key=True)
+  #parent_id = db.Column(db.Integer,db.ForeignKey('user.id'))
+  title = db.Column(db.String(250), unique=True)
+  description = db.Column(db.Text)
+  salary = db.Column(db.Float)
+  image_path = db.Column(db.Text)
+  status = db.Column(db.String(250))
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+  def __init__(self, title, description, salary, image_path, status):
+    self.title = title
+    self.description = description
+    self.salary = salary
+    self.image_path = image_path
+    self.status = status
 
 # Check login credentials
 class Login(Resource):
@@ -55,6 +73,7 @@ class Login(Resource):
       # If the user is a child get its parents. Else get the parents children
       # This will need to be improved inorder to scale
       if user.is_child:
+        active_user = {"username": user.username, "isChild": user.is_child, "fullName": user.full_name}
         for parent in user.parents:
           for child in parent.children:
             if child not in children:
@@ -62,6 +81,7 @@ class Login(Resource):
           if parent not in parents:
             parents.append(parent)
       else:
+        active_user = {"username": user.username, "isChild": user.is_child, "userStage": user.user_stage, "fullName": user.full_name}
         for child in user.children:
           for parent in child.parents:
             if parent not in parents:
@@ -77,7 +97,7 @@ class Login(Resource):
         out_children.append({"username": child.username, "isChild": child.is_child, "userStage": child.user_stage, "fullName": child.full_name})
 
       # Return the array of parents and children
-      return {"active_user": user.username, "parents": out_parents, "children": out_children}
+      return {"active_user": active_user, "parents": out_parents, "children": out_children}
 
     def post(self):
       # Receive the login data
