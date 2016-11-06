@@ -269,6 +269,54 @@ class Update_Chore_Status_Complete(Resource):
           return {"status": "Success", "Message": "User chore status updated"}
     return {"status": "Error", "Message": "Failure changing chore status"}
 
+# Check login credentials
+class Status(Resource):
+    def _seralize_user(self, user):
+      parents = []
+      children = []
+      out_parents = []
+      out_children = []
+
+      # If the user is a child get its parents. Else get the parents children
+      # This will need to be improved inorder to scale
+      if user.is_child:
+        active_user = {"username": user.username, "isChild": user.is_child, "fullName": user.full_name}
+        for parent in user.parents:
+          for child in parent.children:
+            if child not in children:
+              children.append(child)
+          if parent not in parents:
+            parents.append(parent)
+      else:
+        active_user = {"username": user.username, "isChild": user.is_child, "userStage": user.user_stage, "fullName": user.full_name}
+        for child in user.children:
+          for parent in child.parents:
+            if parent not in parents:
+              parents.append(parent)
+          if child not in children:
+            children.append(child)
+
+      # Now we have the list of children and parents
+      for parent in parents:
+        out_parents.append({"username": parent.username, "isChild": parent.is_child, "fullName": parent.full_name})
+
+      for child in children:
+        out_children.append({"username": child.username, "isChild": child.is_child, "userStage": child.user_stage, "fullName": child.full_name})
+
+      # Return the array of parents and children
+      return {"active_user": active_user, "parents": out_parents, "children": out_children}
+
+    def post(self):
+      # Receive the login data
+      login_data = request.get_json()
+      # Pull out json data
+      json_username =(login_data["username"]).lower()
+      # Look for user in the database
+      user = User.query.filter_by(username=json_username).first()
+      if user:
+        return self._seralize_user(user)
+      return {"status":"Login Failed :'("}
+
 api.add_resource(Login, '/login')
 api.add_resource(Get_All_Chores, '/chores')
 api.add_resource(Get_User_Chores, '/chores/<string:username>')
@@ -277,6 +325,6 @@ api.add_resource(Update_Stage, '/update/stage')
 api.add_resource(Assign_Chore, '/assign/chore')
 api.add_resource(Create_Chore, '/create/chore')
 api.add_resource(Update_Chore_Status, '/update/chore/status')
-api.add_resource(Update_Chore_Status_Complete, '/update/chore/status/complete')
+api.add_resource(Status, '/refresh')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
