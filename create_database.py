@@ -31,21 +31,21 @@ with open("chore_state.p", "wb") as pickle_file:
 # Create new database and add users
 db.create_all()
 
-mow_lawn = Chore(title="Mow Lawn", description="Mow the lawn and dump the clippings into a Yard Waste Bag.", salary=20.00, image_path="trophy_main_color", status="not-completed")
+mow_lawn = Chore(title="Mow Lawn", description="Mow the lawn and dump the clippings into a Yard Waste Bag.", salary=20.00, image_path="mow_lawn", status="not-completed")
 
-empty_dishwasher = Chore(title="Empty Dishwasher", description="Empty AND Refill the dishwasher.  Remember to prewash!", salary=5.00, image_path="trophy_main_color", status="not-completed")
+empty_dishwasher = Chore(title="Empty Dishwasher", description="Empty AND Refill the dishwasher.  Remember to prewash!", salary=5.00, image_path="empty_dishwasher", status="not-completed")
 
-vacuum_family_room = Chore(title="Vacuum Family Room", description="Do not forget the corners!  Also move the couch when you go to vacuum!", salary=5.00, image_path="trophy_main_color", status="not-completed")
+vacuum_family_room = Chore(title="Vacuum Family Room", description="Do not forget the corners!  Also move the couch when you go to vacuum!", salary=5.00, image_path="vacuum_family_room", status="not-completed")
 
-clean_bathrooms = Chore(title="Clean Bathrooms", description="Not just the toilet bowl, but around the toilet too.  This includes the bathroom mirror.", salary=10.00, image_path="trophy_main_color", status="not-completed")
+clean_bathrooms = Chore(title="Clean Bathrooms", description="Not just the toilet bowl, but around the toilet too.  This includes the bathroom mirror.", salary=10.00, image_path="clean_bathrooms", status="not-completed")
 
-take_dog_for_walk = Chore(title="Take Dog for Walk", description="Get some exercise and give Fluffy some exercise while you are at it.", salary=2.00, image_path="trophy_main_color", status="not-completed")
+take_dog_for_walk = Chore(title="Take Dog for Walk", description="Get some exercise and give Fluffy some exercise while you are at it.", salary=2.00, image_path="take_dog_for_walk", status="not-completed")
 
-get_an_A = Chore(title="Get an A", description="$2 per A at the end of the year.", salary=2.00, image_path="trophy_main_color", status="not-completed")
+get_an_A = Chore(title="Get an A", description="$2 per A at the end of the year.", salary=2.00, image_path="get_an_a", status="not-completed")
 
-sweep_garage = Chore(title="Sweep Garage", description="Do not just sweep the leaves out of the garage, pick them up!", salary=5.00, image_path="trophy_main_color", status="not-completed")
+sweep_garage = Chore(title="Sweep Garage", description="Do not just sweep the leaves out of the garage, pick them up!", salary=5.00, image_path="sweep_garage", status="not-completed")
 
-roll_over = Chore(title="Roll Over", description="Do a barrel roll!", salary=100.00, image_path="trophy_main_color", status="not-completed")
+roll_over = Chore(title="Roll Over", description="Do a barrel roll!", salary=100.00, image_path="roll_over", status="not-completed")
 
 
 # Create child objects
