@@ -2,6 +2,9 @@ from flask import Flask, request, redirect
 #import requests
 import twilio.twiml
 import cPickle as pickle
+import json
+import urllib2
+
 
 app = Flask(__name__)
 
@@ -25,6 +28,8 @@ def reply_payment():
 
         chore_vars["status"] = "completed"
         payload = {"username": chore_vars["username"], "title": chore_vars["title"], "status": chore_vars["status"]}
+        data = json.dumps(payload)
+        req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
         #r = requests.post(url, json=payload)
         #print r.text
 
@@ -44,6 +49,8 @@ def reply_payment():
 
         chore_vars["status"] = "not-completed"
         payload = {"username": chore_vars["username"], "title": chore_vars["title"], "status": chore_vars["status"]}
+        data = json.dumps(payload)
+        req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
         #r = requests.post(url, json=payload)
         #print r.text
 
