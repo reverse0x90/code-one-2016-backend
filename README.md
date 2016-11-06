@@ -10,3 +10,4 @@
 | POST   | /assign/chore        | Post a JSON with a username and chore title to set. Example: {'username':'test', 'title':'Mow Lawn'}                                                                             | Assign succeed or failed message          |
 | POST   | /create/chore        | Post a JSON with chore parameters to create a new chore. Example:{"title": "Chore Title", "description": "Chore Description", "salary": 10.00, "image_path": "Chore Image Path"} | Create succeed or failed message          |
 | POST   | /update/chore/status | Post a JSON with a username, chore title and new status to set. Example: {"username": "test", "title": "Chore Title", "status": "Chore status"}                                  | Update succeed or failed message          |
+| POST   | /refresh | Post a JSON with a username set. Example: {'username': 'test'}                                | User Context JSON          |
