@@ -158,9 +158,9 @@ class Update_Acount(Resource):
 # Update Account 
 class Update_Stage(Resource):
   def get(self, username, stage):
-     user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(username=username).first()
     if user:
-
+      pass
      return {"status": "Error", "Message": "Firebase updated failure"}
     
     
