@@ -20,7 +20,7 @@ mow_lawn = Chore(title="Mow Lawn", description="Mow the lawn and dump the clippi
 
 empty_dishwasher = Chore(title="Empty Dishwasher", description="Empty AND Refill the dishwasher.  Remember to prewash!", salary=5.00, image_path="trophy_main_color", status="not-completed")
 
-vacuum_family_room = Chore(title="Vacuum Family Room", description="Mow the lawn and dump the clippings into a Yard Waste Bag.", salary=5.00, image_path="trophy_main_color", status="not-completed")
+vacuum_family_room = Chore(title="Vacuum Family Room", description="Do not forget the corners!  Also move the couch when you go to vacuum!", salary=5.00, image_path="trophy_main_color", status="not-completed")
 
 clean_bathrooms = Chore(title="Clean Bathrooms", description="Not just the toilet bowl, but around the toilet too.  This includes the bathroom mirror.", salary=10.00, image_path="trophy_main_color", status="not-completed")
 
