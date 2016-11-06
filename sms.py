@@ -14,7 +14,7 @@ def reply_payment():
     message_body = request.values.get('Body', None)
 
     if "Approve" or "Approve" in message_body:
-         # Save and update the chore status
+         # Save and supdate the chore status
         with open('chore_state.p', 'rb') as pickle_file:
             status_stack = pickle.load(pickle_file)
 
