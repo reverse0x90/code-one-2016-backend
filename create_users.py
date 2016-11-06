@@ -30,14 +30,14 @@ get_an_A = Chore(title="Get an A", description="$2 per A at the end of the year.
 
 sweep_garage = Chore(title="Sweep Garage", description="Do not just sweep the leaves out of the garage, pick them up!", salary=5.00, image_path="trophy_main_color", status="not-completed")
 
-sweep_garage = Chore(title="Roll Over", description="Do a barrel roll!", salary=100.00, image_path="trophy_main_color", status="not-completed")
+roll_over = Chore(title="Roll Over", description="Do a barrel roll!", salary=100.00, image_path="trophy_main_color", status="not-completed")
 
 
 # Create child objects
 maggie = User(username="maggie", password="maggie", is_child=1, user_stage=2, full_name="Maggie Simpson", children=[], chores=[mow_lawn, empty_dishwasher])
 lisa = User(username="lisa", password="lisa", is_child=1, user_stage=2, full_name="Lisa Simpson", children=[], chores=[mow_lawn, empty_dishwasher])
 bart = User(username="bart", password="bart", is_child=1, user_stage=3, full_name="Bart Simpson", children=[], chores=[mow_lawn, empty_dishwasher])
-evan = User(username="child1", password="child", is_child=1, user_stage=1, full_name="Evan Schaal", children=[], chores=[mow_lawn, empty_dishwasher])
+evan = User(username="child1", password="child", is_child=1, user_stage=1, full_name="Evan Schaal", children=[], chores=[mow_lawn, empty_dishwasher, roll_over, vacuum_family_room, clean_bathrooms, take_dog_for_walk, get_an_A, sweep_garage])
 future1 = User(username="future1", password="future1", is_child=1, user_stage=2, full_name="Future Grandgenett", children=[], chores=[mow_lawn, empty_dishwasher])
 future2 = User(username="future2", password="future2", is_child=1, user_stage=3, full_name="Future South", children=[], chores=[mow_lawn, empty_dishwasher])
 
@@ -50,6 +50,7 @@ marge = User(username="marge", password="marge", is_child=0, user_stage=0, full_
 
 # Add the objects to the database
 db.session.add(mow_lawn)
+db.session.add(roll_over)
 db.session.add(empty_dishwasher)
 db.session.add(vacuum_family_room)
 db.session.add(clean_bathrooms)
