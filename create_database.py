@@ -5,13 +5,28 @@ from server import db
 from server import User
 from server import Chore
 import os
+import cPickle as pickle
+from chore_state import Chore_Status_Stack
 
-# Remove database file is already exists
+
+# Remove database file if it already exists
 try:
 	if os.stat("server.db"):
 	   os.remove("server.db")
 except:
 	"Print server.db not found"	
+
+# Remove chore_state if it already exists
+try:
+	if os.stat("chore_state.p"):
+	   os.remove("chore_state.p")
+except:
+	"Print server.db not found"	
+
+status_stack = Chore_Status_Stack()
+
+with open("chore_state.p", "wb") as pickle_file:
+	pickle.dump(status_stack, pickle_file)
 
 # Create new database and add users
 db.create_all()

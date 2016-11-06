@@ -15,10 +15,7 @@ def reply_payment():
     url = 'http://localhost/update/chore/status/complete'
     message_body = request.values.get('Body', None)
 
-    print "Message body %s" % (`message_body`)
-
     if "Approve" in message_body or "approve" in message_body or "Accept" in message_body or "accept" in message_body:
-        print str("I am in approval " + message_body)
          # Save and update the chore status
         pickle_file = open('chore_state.p', 'rb') 
         status_stack = pickle.load(pickle_file)
@@ -36,9 +33,8 @@ def reply_payment():
         f = urllib2.urlopen(req)
         response = f.read()
         f.close()
-        #r = requests.post(url, json=payload)
-        #print r.text
 
+        print "[+] Payment for %s completing the chore %s has been approved" % (chore_vars["username"].title(), chore_vars["title"])
         reply_message = "Thank you for using First National Bank your the chore payment for %s completing the chore %s has been approved and the funds have been successfully transfered." % (chore_vars["username"].title(), chore_vars["title"])
 
     elif "Deny" in message_body or "deny" in message_body:
@@ -61,9 +57,8 @@ def reply_payment():
         f = urllib2.urlopen(req)
         response = f.read()
         f.close()
-        #r = requests.post(url, json=payload)
-        #print r.text
 
+        print "[+] Payment for %s completing the chore %s has been denied" % (chore_vars["username"].title(), chore_vars["title"])
         reply_message = "Thank you for using First National Bank your chore payment for %s completing the chore %s has been denied and no funds have been transfered." % (chore_vars["username"].title(), chore_vars["title"])
     else:
         # Save and update the chore status
@@ -73,6 +68,7 @@ def reply_payment():
 
         chore_vars = status_stack.peek()
 
+         print "[+] Response unknown. Message body was: %s" % *(message_body)
         reply_message = "I am sorry I didn't understand your response. Please reply Approve or Deny the requested payment for %s completing the chore %s." % (chore_vars["username"].title(), chore_vars["title"])
     
     resp = twilio.twiml.Response()
