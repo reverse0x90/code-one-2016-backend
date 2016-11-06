@@ -262,9 +262,25 @@ class Update_Chore_Status_Complete(Resource):
           chore.status = status
           db.session.commit()
           account = "/chores/{0}".format(username)
-          chore = {chore.title: chore.status}
+          chore_fb = {chore.title: chore.status}
           fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
-          result = fb_connect.patch(account, chore, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+          result = fb_connect.patch(account, chore_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+          
+          p_account = '/account/adam/balance'
+          c_account = '/account/%s/balance' % (user.username)
+
+          parent_account_bal = fb_connect.get(p_account, None, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+          child_account_bal = fb_connect.get(c_account, None, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+
+          account = "/account/{0}".format(user.username)
+          account_fb = {"balance": child_account_bal + chore.salary}
+          fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+          result = fb_connect.patch(account, account_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+
+          account = "/account/{0}".format("adam")
+          account_fb = {"balance": parent_account_bal - chore.salary}
+          fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+          result = fb_connect.patch(account, account_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
           # Establish a secure session with gmail's outgoing SMTP server using your gmail account
           return {"status": "Success", "Message": "User chore status updated"}
     return {"status": "Error", "Message": "Failure changing chore status"}
