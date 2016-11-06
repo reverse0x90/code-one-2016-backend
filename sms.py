@@ -12,7 +12,7 @@ app = Flask(__name__)
 def reply_payment():
     """Respond and greet the caller by name."""
 
-    url = 'http://hack.nullify.online/update/chore/status/complete'
+    url = 'http://localhost/update/chore/status/complete'
     message_body = request.values.get('Body', None)
 
     if "Approve" or "Approve" in message_body:
