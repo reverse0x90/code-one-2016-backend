@@ -87,8 +87,10 @@ db.session.add(marge)
 
 db.session.commit()
 
+parents = User.query.filter_by(is_child=0)
 children = User.query.filter_by(is_child=1)
 
+# Setup firebase
 for child in children:
 	for chore in child.chores:
 		account = "/chores/{0}".format(child.username)
@@ -96,5 +98,20 @@ for child in children:
 		fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
 		result = fb_connect.patch(account, chore_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
 		print result
+		
+	account = "/account/{0}".format(child.username)
+	account_fb = {"balance": 200.00}
+	fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+	result = fb_connect.patch(account, account_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+	print result
+
+
+
+for parent in parents:
+	account = "/account/{0}".format(parent.username)
+	account_fb = {"balance": 10000.00}
+	fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+	result = fb_connect.patch(account, account_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+	print result
 
 
