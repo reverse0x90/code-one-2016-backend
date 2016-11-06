@@ -285,23 +285,6 @@ class Update_Chore_Status_Complete(Resource):
           return {"status": "Success", "Message": "User chore status updated"}
     return {"status": "Error", "Message": "Failure changing chore status"}
 
-
-class Update_Chore_Status_Deny(Resource):
-  def post(self):
-    post_data = request.get_json()
-    username = post_data["username"]
-    title = post_data["title"]
-    status = post_data["status"]
-    user = User.query.filter_by(username=username).first()
-    if user:
-      for chore in user.chores:
-        if chore.title == title:
-          chore.status = status
-          db.session.commit()
-          # Establish a secure session with gmail's outgoing SMTP server using your gmail account
-          return {"status": "Success", "Message": "User chore status updated"}
-    return {"status": "Error", "Message": "Failure changing chore status"}
-
 # Check login credentials
 class Status(Resource):
     def _seralize_user(self, user):
@@ -359,7 +342,6 @@ api.add_resource(Assign_Chore, '/assign/chore')
 api.add_resource(Create_Chore, '/create/chore')
 api.add_resource(Update_Chore_Status, '/update/chore/status')
 api.add_resource(Update_Chore_Status_Complete, '/update/chore/status/complete')
-api.add_resource(Update_Chore_Status_Deny, '/update/chore/status/deny')
 api.add_resource(Status, '/refresh')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

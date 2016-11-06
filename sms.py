@@ -11,12 +11,11 @@ app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])
 def reply_payment():
     """Respond and greet the caller by name."""
-
+     url = 'http://localhost/update/chore/status/complete'
 
     message_body = request.values.get('Body', None)
 
     if "Approve" in message_body or "approve" in message_body or "Accept" in message_body or "accept" in message_body:
-        url = 'http://localhost/update/chore/status/complete'
          # Save and update the chore status
         pickle_file = open('chore_state.p', 'rb') 
         status_stack = pickle.load(pickle_file)
@@ -39,7 +38,6 @@ def reply_payment():
         reply_message = "Thank you for using First National Bank your the chore payment for %s completing the chore %s has been approved and the funds have been successfully transfered." % (chore_vars["username"].title(), chore_vars["title"])
 
     elif "Deny" in message_body or "deny" in message_body:
-        url = 'http://localhost/update/chore/status/deny'
         # Save and update the chore status
         pickle_file = open('chore_state.p', 'rb')
         status_stack = pickle.load(pickle_file)
