@@ -277,6 +277,6 @@ api.add_resource(Update_Stage, '/update/stage')
 api.add_resource(Assign_Chore, '/assign/chore')
 api.add_resource(Create_Chore, '/create/chore')
 api.add_resource(Update_Chore_Status, '/update/chore/status')
-api.add_resource(Update_Chore_Status, '/update/chore/status/complete')
+api.add_resource(Update_Chore_Status_Complete, '/update/chore/status/complete')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
