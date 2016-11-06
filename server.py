@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 from firebase import firebase
+from twilio.rest import TwilioRestClient
 
 
 app = Flask(__name__)
@@ -11,6 +12,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
 api = Api(app)
+
+# Find these values at https://twilio.com/user/account
+account_sid = "AC30fdadaeaa4a59de8529d33da2ae313b"
+auth_token = "cb872711044f3a0befd6b80f7faad80a"
+client = TwilioRestClient(account_sid, auth_token)
 
 
 
@@ -218,6 +224,8 @@ class Update_Chore_Status(Resource):
         if chore.title == title:
           chore.status = status
           db.session.commit()
+          message = client.messages.create(to="+14026304979", from_="+14027693538 ", body="Evan has requsted payment for completing the Chore: Roll Over.\n Would you like to Accept or Deny? Please reply Accept or Deny.")
+          # Establish a secure session with gmail's outgoing SMTP server using your gmail account
           return {"status": "Success", "Message": "User chore status updated"}
     return {"status": "Error", "Message": "Failure changing chore status"}
 
