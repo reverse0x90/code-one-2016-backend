@@ -93,7 +93,7 @@ chores = Chore.query.all()
 
 for child in children:
 	for chore in chores:
-		account = "/chores/{0}".format(username)
+		account = "/chores/{0}".format(child.username)
         chore_fb = {chore.title: chore.status}
         fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
         result = fb_connect.patch(account, chore_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
