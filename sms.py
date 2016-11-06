@@ -10,9 +10,9 @@ def reply_payment():
     message_body = request.values.get('Body', None)
 
     if "Approve" or "Approve" in message_body:
-        reply_message = "Thank you for using First National Bank your the chore payment for Evan has has been approved."
+        reply_message = "Thank you for using First National Bank your the chore payment for Evan has has been approved and funds have been successfully transfered."
     elif "Deny" or "deny" in message_body:
-        reply_message = "Thank you for using First National Bank your the chore payment for Evan has has been denied."
+        reply_message = "Thank you for using First National Bank your the chore payment for Evan has has been denied no funds have been transfered."
     else:
         reply_message = "I am sorry I did't understand your response. Please reply Approve or Deny."
     resp = twilio.twiml.Response()
