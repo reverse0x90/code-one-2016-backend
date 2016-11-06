@@ -87,16 +87,14 @@ db.session.add(marge)
 
 db.session.commit()
 
-parents = User.query.filter_by(is_child=0)
 children = User.query.filter_by(is_child=1)
-chores = Chore.query.all()
 
 for child in children:
-	for chore in chores:
+	for chore in child.chores:
 		account = "/chores/{0}".format(child.username)
-        chore_fb = {chore.title: chore.status}
-        fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
-        result = fb_connect.patch(account, chore_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
-        print result
+		chore_fb = {chore.title: chore.status}
+		fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+		result = fb_connect.patch(account, chore_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+		print result
 
 
