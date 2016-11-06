@@ -161,7 +161,7 @@ class Update_Stage(Resource):
     user = User.query.filter_by(username=username).first()
     if user:
       pass
-     return {"status": "Error", "Message": "Firebase updated failure"}
+    return {"status": "Error", "Message": "Firebase updated failure"}
     
     
 
