@@ -131,6 +131,7 @@ class Get_All_Chores(Resource):
       chores_array.append({"title":chore.title, "description": chore.description, "salary": chore.salary, "image_path": chore.image_path, "status": chore.status}) 
     return {"chores": chores_array}
 
+# Get all possible user chores
 class Get_User_Chores(Resource):
   def get(self, username):
      # Look for user in the database
@@ -141,9 +142,9 @@ class Get_User_Chores(Resource):
           chores_array.append({"title":chore.title, "description": chore.description, "salary": chore.salary, "image_path": chore.image_path, "status": chore.status}) 
       return {"chores": chores_array}
 
-
+# Update Account 
 class Update_Acount(Resource):
-  def get(self, username, value):
+  def post(self, username, value):
     try:
       account = "/account/{0}".format(username)
       funds = {"balance": float(value)}
@@ -153,12 +154,24 @@ class Update_Acount(Resource):
       return {"status": "Success", "Message": "Firebase updated success"}
     except:
      return {"status": "Error", "Message": "Firebase updated failure"}
+
+# Update Account 
+class Update_Stage(Resource):
+  def get(self, username, stage):
+     user = User.query.filter_by(username=username).first()
+    if user:
+
+     return {"status": "Error", "Message": "Firebase updated failure"}
+    
     
 
+api.add_resource(Login, '/login')
+api.add_resource(Login, '/login')
 api.add_resource(Login, '/login')
 api.add_resource(Get_All_Chores, '/chores')
 api.add_resource(Get_User_Chores, '/chores/<string:username>')
 api.add_resource(Update_Acount, '/update/account/<string:username>/<string:value>')
+api.add_resource(Update_Stage, '/update/<string:username>/<string:stage>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
