@@ -175,13 +175,50 @@ class Update_Stage(Resource):
          return {"status": "Error", "Message": "User is not a child"}
     return {"status": "Error", "Message": "Failure updating user child stage"}
     
-    
+# Update Account 
+class Assign_Chore(Resource):
+  def post(self):
+    post_data = request.get_json()
+    username = post_data["username"]
+    title = post_data["title"]
+    user = User.query.filter_by(username=username).first()
+    chore = Chore.query.filter_by(title=title).first()
+    if user:
+      if user.is_child:
+        if chore:
+          if chore not in user.chores:
+            user.chores.append(chore)
+            db.session.commit()
+          return {"status": "Success", "Message": "User stage updated"}
+        else:
+         return {"status": "Error", "Message": "Chore not found"} 
+      else:
+         return {"status": "Error", "Message": "User is not a child"}
+    return {"status": "Error", "Message": "Failure adding chore to user"}
 
+# Update Account 
+class Create_Chore(Resource):
+  def post(self):
+    post_data = request.get_json()
+    title = post_data["title"]
+    description = post_data["description"]
+    salary = post_data["salary"]
+    image_path = post_data["image_path"]
+    try:
+      chore = Chore(title=title, description=description, salary=salary, image_path=image_path, status="not-completed")
+      db.session.add(chore)
+      db.session.commit()
+      return {"status": "Success", "Message": "Create chore updated"}
+    except:
+      return {"status": "Error", "Message": "Failure creating new chore"}
+    
+    
 api.add_resource(Login, '/login')
 api.add_resource(Get_All_Chores, '/chores')
 api.add_resource(Get_User_Chores, '/chores/<string:username>')
 api.add_resource(Update_Acount, '/update/account')
 api.add_resource(Update_Stage, '/update/stage')
-
+api.add_resource(Assign_Chore, '/assign/chore')
+api.add_resource(Create_Chore, '/create/chore')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
