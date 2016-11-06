@@ -1,8 +1,7 @@
 from flask import Flask, request, redirect
 import requests
 import twilio.twiml
-import pickle
-from chore_state import Chore_Status_Stack
+import cPickle as pickle
 
 app = Flask(__name__)
 
@@ -14,7 +13,7 @@ def reply_payment():
     message_body = request.values.get('Body', None)
 
     if "Approve" or "Approve" in message_body:
-         # Save and supdate the chore status
+         # Save and update the chore status
         with open('chore_state.p', 'rb') as pickle_file:
             status_stack = pickle.load(pickle_file)
 
@@ -51,13 +50,9 @@ def reply_payment():
         with open('chore_state.p', 'rb') as pickle_file:
             status_stack = pickle.load(pickle_file)
 
-        chore_vars = status_stack.pop()
-        status_stack.push(chore_vars)
+        chore_vars = status_stack.peek()
 
-        with open('chore_state.p', 'wb') as pickle_file:
-            pickle.dump(status_stack, pickle_file)
-
-        reply_message = "I am sorry I did not understand your response. Please reply Approve or Deny the requested payment for %s completing the chore %s." % (chore_vars["username"].title(), chore_vars["title"])
+        reply_message = "I am sorry I didn't understand your response. Please reply Approve or Deny the requested payment for %s completing the chore %s." % (chore_vars["username"].title(), chore_vars["title"])
     resp = twilio.twiml.Response()
     resp.message(reply_message)
 
