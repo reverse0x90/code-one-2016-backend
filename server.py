@@ -160,8 +160,13 @@ class Update_Stage(Resource):
   def get(self, username, stage):
     user = User.query.filter_by(username=username).first()
     if user:
-      pass
-    return {"status": "Error", "Message": "Firebase updated failure"}
+      if user.is_child:
+        user.user_stage = stage
+        db.session.commit()
+        return {"status": "Success", "Message": "User stage updated"}
+      else:
+         return {"status": "Error", "Message": "User is not a child"}
+    return {"status": "Error", "Message": "Failure updating user child stage"}
     
     
 
@@ -169,7 +174,7 @@ api.add_resource(Login, '/login')
 api.add_resource(Get_All_Chores, '/chores')
 api.add_resource(Get_User_Chores, '/chores/<string:username>')
 api.add_resource(Update_Acount, '/update/account/<string:username>/<string:value>')
-api.add_resource(Update_Stage, '/update/<string:username>/<string:stage>')
+api.add_resource(Update_Stage, '/update/stage/<string:username>/<int:stage>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
