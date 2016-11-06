@@ -30,6 +30,8 @@ get_an_A = Chore(title="Get an A", description="$2 per A at the end of the year.
 
 sweep_garage = Chore(title="Sweep Garage", description="Do not just sweep the leaves out of the garage, pick them up!", salary=5.00, image_path="trophy_main_color", status="not-completed")
 
+sweep_garage = Chore(title="Roll Over", description="Do a barrel roll!", salary=100.00, image_path="trophy_main_color", status="not-completed")
+
 
 # Create child objects
 maggie = User(username="maggie", password="maggie", is_child=1, user_stage=2, full_name="Maggie Simpson", children=[], chores=[mow_lawn, empty_dishwasher])

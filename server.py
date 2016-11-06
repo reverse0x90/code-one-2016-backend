@@ -183,18 +183,12 @@ class Assign_Chore(Resource):
     title = post_data["title"]
     user = User.query.filter_by(username=username).first()
     chore = Chore.query.filter_by(title=title).first()
-    if user:
-      if user.is_child:
-        if chore:
-          if chore not in user.chores:
-            user.chores.append(chore)
-            db.session.commit()
-          return {"status": "Success", "Message": "User stage updated"}
-        else:
-         return {"status": "Error", "Message": "Chore not found"} 
-      else:
-         return {"status": "Error", "Message": "User is not a child"}
-    return {"status": "Error", "Message": "Failure adding chore to user"}
+    if user and chore:
+        user.chores.append(chore)
+        db.session.commit()
+        return {"status": "Success", "Message": "User stage updated"}
+    else:
+      return {"status": "Error", "Message": "Failure adding chore to user"}
 
 # Update Account 
 class Create_Chore(Resource):
@@ -211,7 +205,22 @@ class Create_Chore(Resource):
       return {"status": "Success", "Message": "Create chore updated"}
     except:
       return {"status": "Error", "Message": "Failure creating new chore"}
-    
+
+class Update_Chore_Status(Resource):
+  def post(self):
+    post_data = request.get_json()
+    username = post_data["username"]
+    title = post_data["title"]
+    status = post_data["status"]
+    user = User.query.filter_by(username=username).first()
+    if user:
+      for chore in user.chores:
+        if chore.title == title:
+          chore.status = status
+          db.session.commit()
+          return {"status": "Success", "Message": "User chore status updated"}
+    return {"status": "Error", "Message": "Failure changing chore status"}
+
     
 api.add_resource(Login, '/login')
 api.add_resource(Get_All_Chores, '/chores')
@@ -220,5 +229,6 @@ api.add_resource(Update_Acount, '/update/account')
 api.add_resource(Update_Stage, '/update/stage')
 api.add_resource(Assign_Chore, '/assign/chore')
 api.add_resource(Create_Chore, '/create/chore')
+api.add_resource(Update_Chore_Status, '/update/chore/status')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
