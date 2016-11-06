@@ -30,6 +30,9 @@ def reply_payment():
         payload = {"username": chore_vars["username"], "title": chore_vars["title"], "status": chore_vars["status"]}
         data = json.dumps(payload)
         req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
+        f = urllib2.urlopen(req)
+        response = f.read()
+        f.close()
         #r = requests.post(url, json=payload)
         #print r.text
 
@@ -51,6 +54,9 @@ def reply_payment():
         payload = {"username": chore_vars["username"], "title": chore_vars["title"], "status": chore_vars["status"]}
         data = json.dumps(payload)
         req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
+        f = urllib2.urlopen(req)
+        response = f.read()
+        f.close()
         #r = requests.post(url, json=payload)
         #print r.text
 
