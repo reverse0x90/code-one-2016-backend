@@ -15,7 +15,7 @@ def reply_payment():
     url = 'http://localhost/update/chore/status/complete'
     message_body = request.values.get('Body', None)
 
-    print "Message body %s" (message_body)
+    print "Message body %s" % (message_body)
 
     if "Approve" or "Approve" in message_body:
          # Save and update the chore status
