@@ -15,9 +15,10 @@ def reply_payment():
     url = 'http://localhost/update/chore/status/complete'
     message_body = request.values.get('Body', None)
 
-    print "Message body %s" % (message_body)
+    print "Message body %s" % (`message_body`)
 
-    if "Approve" or "Approve" in message_body:
+    if "Approve" in message_body or "approve" in message_body or "Accept" in message_body or "accept" in message_body:
+        print str("I am in approval " + message_body)
          # Save and update the chore status
         pickle_file = open('chore_state.p', 'rb') 
         status_stack = pickle.load(pickle_file)
@@ -40,7 +41,8 @@ def reply_payment():
 
         reply_message = "Thank you for using First National Bank your the chore payment for %s completing the chore %s has been approved and the funds have been successfully transfered." % (chore_vars["username"].title(), chore_vars["title"])
 
-    elif "Deny" or "deny" in message_body:
+    elif "Deny" in message_body or "deny" in message_body:
+        print str("I am in deny " + message_body)
         # Save and update the chore status
         pickle_file = open('chore_state.p', 'rb')
         status_stack = pickle.load(pickle_file)
