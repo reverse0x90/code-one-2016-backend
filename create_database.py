@@ -89,7 +89,7 @@ db.session.commit()
 
 parents = User.query.filter_by(is_child=0)
 children = User.query.filter_by(is_child=1)
-chores = Chores.query.all()
+chores = Chore.query.all()
 
 for child in children:
 	for chore in chores:
