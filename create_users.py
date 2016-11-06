@@ -43,7 +43,7 @@ future2 = User(username="future2", password="future2", is_child=1, user_stage=3,
 
 # Create parent objects
 ryan = User(username="ryan", password="ryan", is_child=0, user_stage=0, full_name="Ryan Grandgenett", children=[future1], chores=[])
-adam = User(username="adam", password="adam", is_child=0, user_stage=0, full_name="Adam Schaal", children=[evan], chores=[])
+adam = User(username="adam", password="adam", is_child=0, user_stage=0, full_name="Adam Schaal", children=[evan, bart, lisa], chores=[])
 josiah = User(username="josiah", password="test123", is_child=0, user_stage=0, full_name="Josiah South", children=[future2], chores=[])
 homer = User(username="homer", password="homer", is_child=0, user_stage=0, full_name="Homer Simpson", children=[bart, maggie, lisa], chores=[])
 marge = User(username="marge", password="marge", is_child=0, user_stage=0, full_name="Marge Simpson", children=[bart, maggie, lisa], chores=[])
