@@ -166,8 +166,6 @@ class Update_Stage(Resource):
     
 
 api.add_resource(Login, '/login')
-api.add_resource(Login, '/login')
-api.add_resource(Login, '/login')
 api.add_resource(Get_All_Chores, '/chores')
 api.add_resource(Get_User_Chores, '/chores/<string:username>')
 api.add_resource(Update_Acount, '/update/account/<string:username>/<string:value>')
