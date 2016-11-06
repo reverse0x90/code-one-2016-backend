@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])
 def reply_payment():
     """Respond and greet the caller by name."""
-     url = 'http://localhost/update/chore/status/complete'
+    url = 'http://localhost/update/chore/status/complete'
 
     message_body = request.values.get('Body', None)
 
