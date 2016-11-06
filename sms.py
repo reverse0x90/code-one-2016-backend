@@ -68,7 +68,7 @@ def reply_payment():
 
         chore_vars = status_stack.peek()
 
-         print "[+] Response unknown. Message body was: %s" % *(message_body)
+         print "[+] Response unknown. Message body was: %s" % (message_body)
         reply_message = "I am sorry I didn't understand your response. Please reply Approve or Deny the requested payment for %s completing the chore %s." % (chore_vars["username"].title(), chore_vars["title"])
     
     resp = twilio.twiml.Response()
