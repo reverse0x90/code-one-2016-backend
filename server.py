@@ -1,9 +1,11 @@
+import cPickle as pickle
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 from firebase import firebase
 from twilio.rest import TwilioRestClient
+from chore_state import Chore_Status_Stack
 
 
 app = Flask(__name__)
@@ -227,17 +229,46 @@ class Update_Chore_Status(Resource):
         if chore.title == title:
           chore.status = status
           db.session.commit()
-          message = client.messages.create(to="+14026304979", from_="+14027693538 ", body="Evan has requsted payment for completing the Chore: Roll Over.\n Would you like to Accept or Deny? Please reply Accept or Deny.")
+          body_message =" %s has requsted payment for completing the chore: %s.\n Would you like to Accept or Deny? Please reply Accept or Deny." % (username.title(), title)
+          message = client.messages.create(to="+14026304979", from_="+14027693538 ", body=body_message)
           account = "/chores/{0}".format(username)
           chore = {chore.title: chore.status}
+          fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+          result = fb_connect.patch(account, chore, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
 
+          # Save and update the chore status
+          with open('chore_state.p', 'rb') as pickle_file:
+            status_stack = pickle.load(pickle_file)
+
+          status_stack.push(username=username, title=title, status=status)
+
+          with open('chore_state.p', 'wb') as pickle_file:
+            pickle.dump(status_stack, pickle_file)
+
+          # Establish a secure session with gmail's outgoing SMTP server using your gmail account
+          return {"status": "Success", "Message": "User chore status updated"}
+    return {"status": "Error", "Message": "Failure changing chore status"}
+
+class Update_Chore_Status_Complete(Resource):
+  def post(self):
+    post_data = request.get_json()
+    username = post_data["username"]
+    title = post_data["title"]
+    status = post_data["status"]
+    user = User.query.filter_by(username=username).first()
+    if user:
+      for chore in user.chores:
+        if chore.title == title:
+          chore.status = status
+          db.session.commit()
+          account = "/chores/{0}".format(username)
+          chore = {chore.title: chore.status}
           fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
           result = fb_connect.patch(account, chore, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
           # Establish a secure session with gmail's outgoing SMTP server using your gmail account
           return {"status": "Success", "Message": "User chore status updated"}
     return {"status": "Error", "Message": "Failure changing chore status"}
 
-    
 api.add_resource(Login, '/login')
 api.add_resource(Get_All_Chores, '/chores')
 api.add_resource(Get_User_Chores, '/chores/<string:username>')
@@ -246,5 +277,6 @@ api.add_resource(Update_Stage, '/update/stage')
 api.add_resource(Assign_Chore, '/assign/chore')
 api.add_resource(Create_Chore, '/create/chore')
 api.add_resource(Update_Chore_Status, '/update/chore/status')
+api.add_resource(Update_Chore_Status, '/update/chore/status/complete')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
