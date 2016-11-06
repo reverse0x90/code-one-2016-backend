@@ -7,6 +7,7 @@ from server import Chore
 import os
 import cPickle as pickle
 from chore_state import Chore_Status_Stack
+from firebase import firebase
 
 
 # Remove database file if it already exists
@@ -88,17 +89,14 @@ db.session.commit()
 
 parents = User.query.filter_by(is_child=0)
 children = User.query.filter_by(is_child=1)
+chores = Chores.query.all()
 
-print "\n\n===Parents of children in the database===\n"
-for parent in parents:
-	print "{0}:".format(parent.full_name)
-	for child in parent.children:
-		print "\t%s: Chores %s" % (child.full_name, str(list(child.chores)))
-	print "\n"
-
-print "\n\n===Children of parents in the database===\n"
 for child in children:
-	print "{0}:".format(child.full_name)
-	for parent in child.parents:
-		print "\t{0}".format(parent.full_name)
-	print "\n"
+	for chore in chores:
+		 account = "/chores/{0}".format(username)
+         chore_fb = {chore.title: chore.status}
+         fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+         result = fb_connect.patch(account, chore_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+         print result
+
+

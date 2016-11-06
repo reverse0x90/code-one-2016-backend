@@ -232,9 +232,9 @@ class Update_Chore_Status(Resource):
           body_message =" %s has requsted payment for completing the chore: %s.\n Would you like to Accept or Deny? Please reply Accept or Deny." % (username.title(), title)
           message = client.messages.create(to="+14026304979", from_="+14027693538 ", body=body_message)
           account = "/chores/{0}".format(username)
-          chore = {chore.title: chore.status}
+          chore_fb = {chore.title: chore.status}
           fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
-          result = fb_connect.patch(account, chore, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+          result = fb_connect.patch(account, chore_fb, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
 
           # Save and update the chore status
           with open('chore_state.p', 'rb') as pickle_file:
