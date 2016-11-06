@@ -172,13 +172,16 @@ class Update_Stage(Resource):
     username = post_data["username"]
     stage = post_data["stage"]
     user = User.query.filter_by(username=username).first()
-    if user:
-      if user.is_child:
-        user.user_stage = int(stage)
-        db.session.commit()
-        return {"status": "Success", "Message": "User stage updated"}
-      else:
-         return {"status": "Error", "Message": "User is not a child"}
+    try:
+      if user:
+        if user.is_child:
+          user.user_stage = int(stage)
+          db.session.commit()
+          return {"status": "Success", "Message": "User stage updated"}
+        else:
+           return {"status": "Error", "Message": "User is not a child"}
+    except:
+      print "Error updating firebase :("
     return {"status": "Error", "Message": "Failure updating user child stage"}
     
 # Update Account 
@@ -225,6 +228,11 @@ class Update_Chore_Status(Resource):
           chore.status = status
           db.session.commit()
           message = client.messages.create(to="+14026304979", from_="+14027693538 ", body="Evan has requsted payment for completing the Chore: Roll Over.\n Would you like to Accept or Deny? Please reply Accept or Deny.")
+          account = "/chores/{0}".format(username)
+          chore = {chore.title: chore.status}
+
+          fb_connect = firebase.FirebaseApplication('https://popping-fire-3662.firebaseio.com', None)
+          result = fb_connect.patch(account, chore, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
           # Establish a secure session with gmail's outgoing SMTP server using your gmail account
           return {"status": "Success", "Message": "User chore status updated"}
     return {"status": "Error", "Message": "Failure changing chore status"}
