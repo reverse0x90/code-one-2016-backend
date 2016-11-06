@@ -161,14 +161,14 @@ class Update_Acount(Resource):
 
 # Update Account 
 class Update_Stage(Resource):
-  def post(self, username, stage):
+  def post(self):
     post_data = request.get_json()
     username = post_data["username"]
     stage = post_data["stage"]
     user = User.query.filter_by(username=username).first()
     if user:
       if user.is_child:
-        user.user_stage = stage
+        user.user_stage = int(stage)
         db.session.commit()
         return {"status": "Success", "Message": "User stage updated"}
       else:
@@ -180,8 +180,8 @@ class Update_Stage(Resource):
 api.add_resource(Login, '/login')
 api.add_resource(Get_All_Chores, '/chores')
 api.add_resource(Get_User_Chores, '/chores/<string:username>')
-api.add_resource(Update_Acount)
-api.add_resource(Update_Stage)
+api.add_resource(Update_Acount, '/update/account')
+api.add_resource(Update_Stage, '/update/stage')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
